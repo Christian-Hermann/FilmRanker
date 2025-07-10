@@ -21,7 +21,7 @@ let movies = [
     id: 3,
     title: "The Goonies",
     director: "Richard Donner",
-    genre: "adventure",
+    genre: ["adventure"],
     releaseYear: 1985,
   },
 ];
@@ -35,20 +35,11 @@ router.get("/", (req, res) => {
     });
   }
 
-  // if genre is a string
   if (genre) {
     filteredMovies = filteredMovies.filter((movie) => {
-      if (typeof movie.genre === "string") {
-        return movie.genre.toLowerCase().includes(genre.toLowerCase());
-      }
-
-      // if genre is an array
-      if (Array.isArray(movie.genre)) {
-        return movie.genre.some((g) =>
-          g.toLowerCase().includes(genre.toLowerCase())
-        );
-      }
-      return false;
+      return movie.genre.some((g) => {
+        return g.toLowerCase().includes(genre.toLowerCase());
+      });
     });
   }
   if (releaseYear) {
