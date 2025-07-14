@@ -4,14 +4,17 @@ import SearchBar from "./components/SearchBar";
 
 function App() {
   const [movies, setMovies] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState({
+    director: "",
+    genre: "",
+    releaseYear: "",
+  });
 
   useEffect(() => {
     async function getMovies() {
       try {
-        const res = await fetch(
-          `http://localhost:3000/movies?director=${searchTerm}`
-        );
+        const query = new URLSearchParams(searchTerm).toString();
+        const res = await fetch(`http://localhost:3000/movies?${query}`);
         const data = await res.json();
         setMovies(data);
       } catch (err) {
