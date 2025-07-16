@@ -1,4 +1,4 @@
-function MovieList({ movies }) {
+function MovieList({ movies, onDelete }) {
   return (
     <ul>
       {movies.map((movie) => (
@@ -8,6 +8,8 @@ function MovieList({ movies }) {
           Directed by {movie.director}
           <br />
           Genre: {movie.genre.join(", ")}
+          <br />
+          <button onClick={() => onDelete(movie.id)}>Delete</button>
         </li>
       ))}
     </ul>

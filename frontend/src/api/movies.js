@@ -1,3 +1,10 @@
+const BASE_URL = "http://localhost:3000/movies";
+
+export async function getAllMovies(searchParams = "") {
+  const res = await fetch(`${BASE_URL}?${searchParams}`);
+  return await res.json();
+}
+
 export async function addMovie(movieData) {
   const formattedData = {
     ...movieData,
@@ -5,15 +12,24 @@ export async function addMovie(movieData) {
     releaseYear: parseInt(movieData.releaseYear),
   };
 
-  const res = await fetch("http://localhost:3000/movies", {
+  const res = await fetch(BASE_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(formattedData),
   });
 
   if (!res.ok) {
-    throw newError("Failed to add movie");
+    throw new Error("Failed to add movie");
   }
 
   return await res.json();
+}
+
+export async function deleteMovie(id) {
+  const res = await fetch(`${BASE_URL}/${id}`, {
+    method: "DELETE",
+  });
+  if (!res.ok) {
+    throw new Error("Failed to delete movie");
+  }
 }

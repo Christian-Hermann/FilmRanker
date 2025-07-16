@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import MovieList from "./components/MovieList";
 import SearchBar from "./components/SearchBar";
+import { deleteMovie } from "./api/movies";
 
 function App() {
   const [movies, setMovies] = useState([]);
@@ -25,11 +26,20 @@ function App() {
     getMovies();
   }, [searchTerm]);
 
+  async function handleDelete(id) {
+    try {
+      await deleteMovie(id);
+      setMovies((prev) => prev.filter((movie) => movie.id !== id));
+    } catch (err) {
+      console.error("Error deleting movie:", err);
+    }
+  }
+
   return (
     <div>
       <h1>FilmRanker</h1>
       <SearchBar onSearch={setSearchTerm} />
-      <MovieList movies={movies} />
+      <MovieList movies={movies} onDelete={handleDelete} />
     </div>
   );
 }
