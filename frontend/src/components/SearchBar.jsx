@@ -56,6 +56,14 @@ function SearchBar({ onSearch }) {
         placeholder="Search by year"
         onChange={handleChange}
       />
+      <br />
+      <button
+        onClick={() =>
+          onSearch({ title: "", director: "", genre: "", releaseYear: "" })
+        }
+      >
+        Clear Filters
+      </button>
     </div>
   );
 }
