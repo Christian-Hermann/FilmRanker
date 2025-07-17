@@ -51,9 +51,11 @@ function SearchBar({ onSearch }) {
         </select>
       </label>
       <input
-        type="number"
+        type="text"
         name="releaseYear"
-        placeholder="Search by year"
+        placeholder="Search by year (e.g. 1999)"
+        pattern="\d{4}"
+        maxLength="4"
         onChange={handleChange}
       />
       <br />

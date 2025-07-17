@@ -3,6 +3,7 @@ import MovieList from "./components/MovieList";
 import SearchBar from "./components/SearchBar";
 import { deleteMovie } from "./api/movies";
 import EditMovieForm from "./components/EditMovieForm";
+import AddMovieForm from "./components/AddMovieForm";
 
 function App() {
   const [movies, setMovies] = useState([]);
@@ -13,6 +14,7 @@ function App() {
     releaseYear: "",
   });
   const [editingMovie, setEditingMovie] = useState(null);
+  const [showAddForm, setShowAddForm] = useState(false);
 
   useEffect(() => {
     async function getMovies() {
@@ -31,6 +33,28 @@ function App() {
 
   function handleEditClick(movie) {
     setEditingMovie(movie);
+  }
+
+  async function handleAddMovie(newMovie) {
+    try {
+      const res = await fetch("http://localhost:3000/movies", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...newMovie,
+          genre: newMovie.genre.split(",").map((g) => g.trim().toLowerCase()),
+          releaseYear: parseInt(newMovie.releaseYear),
+        }),
+      });
+
+      if (!res.ok) throw new Error("Failed to add movie");
+
+      const data = await res.json();
+      setMovies((prev) => [...prev, data]);
+      setShowAddForm(false);
+    } catch (err) {
+      console.error("Error adding movie:", err);
+    }
   }
 
   async function handleUpdateMovie(updatedMovie) {
@@ -100,6 +124,10 @@ function App() {
   return (
     <div>
       <h1>FilmRanker</h1>
+      <button onClick={() => setShowAddForm(!showAddForm)}>
+        {showAddForm ? "Cancel" : "Add a new film"}
+      </button>
+      {showAddForm && <AddMovieForm onAdd={handleAddMovie} />}
       <SearchBar onSearch={setSearchTerm} />
       <MovieList
         movies={movies}
