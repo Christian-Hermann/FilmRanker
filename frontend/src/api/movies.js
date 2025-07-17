@@ -8,7 +8,7 @@ export async function getAllMovies(searchParams = "") {
 export async function addMovie(movieData) {
   const formattedData = {
     ...movieData,
-    genre: movieData.genre.split(",").map((g) => g.trim()),
+    genre: movieData.genre.split(",").map((g) => g.trim().toLowerCase()),
     releaseYear: parseInt(movieData.releaseYear),
   };
 

@@ -1,3 +1,24 @@
+const genreOptions = [
+  "action",
+  "comedy",
+  "horror",
+  "drama",
+  "sci-fi",
+  "adventure",
+  "fantasy",
+  "thriller",
+  "suspense",
+  "foriegn",
+  "romance",
+  "bromance",
+  "animation",
+  "road-trip",
+  "rom-com",
+  "teen",
+  "dystopian",
+  "documentary",
+];
+
 function SearchBar({ onSearch }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -8,16 +29,27 @@ function SearchBar({ onSearch }) {
     <div>
       <input
         type="text"
-        name="director"
-        placeholder="Search by director"
+        name="title"
+        placeholder="Search by title"
         onChange={handleChange}
       />
       <input
         type="text"
-        name="genre"
-        placeholder="Search by genre"
+        name="director"
+        placeholder="Search by director"
         onChange={handleChange}
       />
+      <label>
+        Genre:
+        <select name="genre" onChange={handleChange}>
+          <option value="">All Genres</option>
+          {genreOptions.map((g) => (
+            <option key={g} value={g}>
+              {g}
+            </option>
+          ))}
+        </select>
+      </label>
       <input
         type="number"
         name="releaseYear"

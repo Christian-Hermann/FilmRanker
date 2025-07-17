@@ -7,6 +7,7 @@ import EditMovieForm from "./components/EditMovieForm";
 function App() {
   const [movies, setMovies] = useState([]);
   const [searchTerm, setSearchTerm] = useState({
+    title: "",
     director: "",
     genre: "",
     releaseYear: "",
