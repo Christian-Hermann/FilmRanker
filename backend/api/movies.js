@@ -7,14 +7,14 @@ let movies = [
     id: 1,
     title: "Mad Max: Fury Road",
     director: "George Miller",
-    genre: ["action", "sci-fi"],
+    genre: ["action"],
     releaseYear: 2015,
   },
   {
     id: 2,
     title: "Alien Romulus",
     director: "Fede Alvarez",
-    genre: ["sci-fi", "horror"],
+    genre: ["horror", "sci-fi"],
     releaseYear: 2024,
   },
   {
@@ -27,11 +27,17 @@ let movies = [
 ];
 
 router.get("/", (req, res) => {
-  const { director, genre, releaseYear } = req.query;
+  const { title, director, genre, releaseYear } = req.query;
   let filteredMovies = movies;
   if (director) {
     filteredMovies = filteredMovies.filter((movie) => {
       return movie.director.toLowerCase().includes(director.toLowerCase());
+    });
+  }
+
+  if (title) {
+    filteredMovies = filteredMovies.filter((movie) => {
+      return movie.title.toLowerCase().includes(title.toLowerCase());
     });
   }
 
