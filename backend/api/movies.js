@@ -1,4 +1,5 @@
 import express from "express";
+import { requireUser } from "../middleware/requireUser.js";
 
 const router = express.Router();
 
@@ -56,7 +57,7 @@ router.get("/", (req, res) => {
   res.json(filteredMovies);
 });
 
-router.post("/", (req, res) => {
+router.post("/", requireUser, (req, res) => {
   const { title, director, genre, releaseYear } = req.body;
   const newMovie = {
     id: movies.length + 1,
@@ -64,6 +65,7 @@ router.post("/", (req, res) => {
     director,
     genre,
     releaseYear,
+    userId: req.user.id,
   };
 
   movies.push(newMovie);
