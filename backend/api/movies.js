@@ -73,7 +73,7 @@ router.post("/", requireUser, (req, res) => {
   res.status(201).json(newMovie);
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id", requireUser, (req, res) => {
   const movieId = parseInt(req.params.id);
   const movie = movies.find((m) => m.id === movieId);
   if (!movie) {
@@ -88,7 +88,7 @@ router.put("/:id", (req, res) => {
   res.json(movie);
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", requireUser, (req, res) => {
   const movieId = parseInt(req.params.id);
   const movieIndex = movies.findIndex((m) => m.id === movieId);
 
