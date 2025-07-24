@@ -1,5 +1,6 @@
 import express from "express";
 import { requireUser } from "../middleware/requireUser.js";
+import { getAllMovies, createMovie } from "../db/movies.js";
 
 const router = express.Router();
 
@@ -27,50 +28,32 @@ let movies = [
   },
 ];
 
-router.get("/", (req, res) => {
-  const { title, director, genre, releaseYear } = req.query;
-  let filteredMovies = movies;
-  if (director) {
-    filteredMovies = filteredMovies.filter((movie) => {
-      return movie.director.toLowerCase().includes(director.toLowerCase());
-    });
+router.get("/", async (req, res) => {
+  try {
+    const movies = await getAllMovies();
+    res.json(movies);
+  } catch (err) {
+    console.error("Errror getting movies:", err);
+    res.status(500).json({ error: "Internal server error" });
   }
-
-  if (title) {
-    filteredMovies = filteredMovies.filter((movie) => {
-      return movie.title.toLowerCase().includes(title.toLowerCase());
-    });
-  }
-
-  if (genre) {
-    filteredMovies = filteredMovies.filter((movie) => {
-      return movie.genre.some((g) => {
-        return g.toLowerCase().includes(genre.toLowerCase());
-      });
-    });
-  }
-  if (releaseYear) {
-    filteredMovies = filteredMovies.filter(
-      (movie) => movie.releaseYear === parseInt(releaseYear)
-    );
-  }
-  res.json(filteredMovies);
 });
 
-router.post("/", requireUser, (req, res) => {
-  const { title, director, genre, releaseYear } = req.body;
-  const newMovie = {
-    id: movies.length + 1,
-    title,
-    director,
-    genre,
-    releaseYear,
-    userId: req.user.id,
-  };
+router.post("/", requireUser, async (req, res) => {
+  try {
+    const { title, director, genre, release_year } = req.body;
 
-  movies.push(newMovie);
-
-  res.status(201).json(newMovie);
+    const newMovie = await createMovie({
+      title,
+      director,
+      genre,
+      release_year: release_year,
+      user_id: req.user.id,
+    });
+    res.status(201).json(newMovie);
+  } catch (err) {
+    console.error("Error creating movie:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 router.put("/:id", requireUser, (req, res) => {
