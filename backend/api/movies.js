@@ -31,6 +31,7 @@ let movies = [
 router.get("/", async (req, res) => {
   try {
     const movies = await getAllMovies();
+    console.log("Returning movies:", movies);
     res.json(movies);
   } catch (err) {
     console.error("Errror getting movies:", err);
@@ -40,13 +41,13 @@ router.get("/", async (req, res) => {
 
 router.post("/", requireUser, async (req, res) => {
   try {
-    const { title, director, genre, release_year } = req.body;
+    const { title, director, genre, releaseYear } = req.body;
 
     const newMovie = await createMovie({
       title,
       director,
       genre,
-      release_year: release_year,
+      releaseYear,
       user_id: req.user.id,
     });
     res.status(201).json(newMovie);
