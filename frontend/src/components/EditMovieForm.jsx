@@ -52,8 +52,9 @@ function EditMovieForm({ movie, onUpdate, onCancel }) {
         placeholder="Genres (comma-separated)"
       />
       <input
+        type="number"
         name="releaseYear"
-        value={formData.releaseYear}
+        value={formData.releaseYear ?? ""}
         onChange={handleChange}
         placeholder="Release Year"
       />

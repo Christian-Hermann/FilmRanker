@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import MovieList from "./components/MovieList";
 import SearchBar from "./components/SearchBar";
-import { deleteMovie } from "./api/movies";
 import EditMovieForm from "./components/EditMovieForm";
 import AddMovieForm from "./components/AddMovieForm";
+import RegisterForm from "./components/RegisterForm";
+import LoginForm from "./components/LoginForm";
+import { deleteMovie } from "./api/movies";
 
 function App() {
   const [movies, setMovies] = useState([]);
@@ -15,6 +17,8 @@ function App() {
   });
   const [editingMovie, setEditingMovie] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [user, setUser] = useState(null);
+  const [showLogin, setShowLogin] = useState(false);
 
   useEffect(() => {
     async function getMovies() {
@@ -36,10 +40,15 @@ function App() {
   }
 
   async function handleAddMovie(newMovie) {
+    const token = localStorage.getItem("token");
+
     try {
       const res = await fetch("http://localhost:3000/movies", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({
           ...newMovie,
           genre: newMovie.genre.split(",").map((g) => g.trim().toLowerCase()),
@@ -58,12 +67,17 @@ function App() {
   }
 
   async function handleUpdateMovie(updatedMovie) {
+    const token = localStorage.getItem("token");
+
     try {
       const res = await fetch(
         `http://localhost:3000/movies/${updatedMovie.id}`,
         {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
           body: JSON.stringify({
             ...updatedMovie,
             genre: updatedMovie.genre.split(",").map((g) => g.trim()),
@@ -124,24 +138,56 @@ function App() {
   return (
     <div>
       <h1>FilmRanker</h1>
-      <button onClick={() => setShowAddForm(!showAddForm)}>
-        {showAddForm ? "Cancel" : "Add a new film"}
-      </button>
-      {showAddForm && <AddMovieForm onAdd={handleAddMovie} />}
-      <SearchBar onSearch={setSearchTerm} />
-      <MovieList
-        movies={movies}
-        onDelete={handleDelete}
-        onEdit={handleEditClick}
-        onMoveUp={handleMoveUp}
-        onMoveDown={handleMoveDown}
-      />
-      {editingMovie && (
-        <EditMovieForm
-          movie={editingMovie}
-          onUpdate={handleUpdateMovie}
-          onCancel={() => setEditingMovie(null)}
-        />
+
+      {!user ? (
+        <>
+          {showLogin ? (
+            <>
+              <LoginForm onLogin={setUser} />
+              <p>
+                Don't have an account?{" "}
+                <button onClick={() => setShowLogin(false)}>Register</button>
+              </p>
+            </>
+          ) : (
+            <>
+              <RegisterForm onRegister={setUser} />
+              <p>
+                Already have an account?{" "}
+                <button onClick={() => setShowLogin(true)}>Login</button>
+              </p>
+            </>
+          )}
+        </>
+      ) : (
+        <>
+          <p>Welcome, {user.username}!</p>
+          <button onClick={() => setUser(null)}>Logout</button>
+
+          <button onClick={() => setShowAddForm(!showAddForm)}>
+            {showAddForm ? "Cancel" : "Add a new film"}
+          </button>
+
+          {showAddForm && <AddMovieForm onAdd={handleAddMovie} />}
+
+          <SearchBar onSearch={setSearchTerm} />
+
+          <MovieList
+            movies={movies}
+            onDelete={handleDelete}
+            onEdit={handleEditClick}
+            onMoveUp={handleMoveUp}
+            onMoveDown={handleMoveDown}
+          />
+
+          {editingMovie && (
+            <EditMovieForm
+              movie={editingMovie}
+              onUpdate={handleUpdateMovie}
+              onCancel={() => setEditingMovie(null)}
+            />
+          )}
+        </>
       )}
     </div>
   );
