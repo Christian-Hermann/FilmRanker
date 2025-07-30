@@ -60,36 +60,37 @@ function App() {
     }
   }
 
-  async function handleUpdateMovie(updatedMovie) {
+  async function handleAddGenre(movieId, newGenre) {
     const token = localStorage.getItem("token");
+    const movie = movies.find((m) => m.id === movieId);
+
+    if (!movie || !newGenre) return;
+
+    const updatedGenres = [
+      ...new Set([...movie.genre, newGenre.toLowerCase()]),
+    ];
 
     try {
-      const res = await fetch(
-        `http://localhost:3000/movies/${updatedMovie.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            ...updatedMovie,
-            genre: updatedMovie.genre.split(",").map((g) => g.trim()),
-          }),
-        }
-      );
+      const res = await fetch(`http://localhost:3000/movies/${movieId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          ...movie,
+          genre: updatedGenres,
+          releaseYear: parseInt(movie.releaseYear),
+        }),
+      });
 
-      if (!res.ok) throw new Error("Failed to update movie");
+      if (!res.ok) throw new Error("Failed to update genres");
 
       const data = await res.json();
 
-      setMovies((movies) =>
-        movies.map((movie) => (movie.id === data.id ? data : movie))
-      );
-
-      setEditingMovie(null);
+      setMovies((prev) => prev.map((m) => (m.id === data.id ? data : m)));
     } catch (err) {
-      console.log("Error updating movie:", err);
+      console.error("Error adding genre:", err);
     }
   }
 
@@ -170,6 +171,7 @@ function App() {
             onDelete={handleDelete}
             onMoveUp={handleMoveUp}
             onMoveDown={handleMoveDown}
+            onAddGenre={handleAddGenre}
           />
         </>
       )}
