@@ -1,4 +1,4 @@
-function MovieList({ movies, onDelete, onEdit, onMoveUp, onMoveDown }) {
+function MovieList({ movies, onDelete, onMoveUp, onMoveDown }) {
   return (
     <ul>
       {movies.map((movie) => (
@@ -11,7 +11,6 @@ function MovieList({ movies, onDelete, onEdit, onMoveUp, onMoveDown }) {
           <br />
           <button onClick={() => onMoveUp(movie.id)}>↑</button>
           <button onClick={() => onMoveDown(movie.id)}>↓</button>
-          <button onClick={() => onEdit(movie)}>Edit</button>
           <button onClick={() => onDelete(movie.id)}>Delete</button>
         </li>
       ))}

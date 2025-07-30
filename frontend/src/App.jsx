@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import MovieList from "./components/MovieList";
 import SearchBar from "./components/SearchBar";
-import EditMovieForm from "./components/EditMovieForm";
 import AddMovieForm from "./components/AddMovieForm";
 import RegisterForm from "./components/RegisterForm";
 import LoginForm from "./components/LoginForm";
@@ -15,7 +14,6 @@ function App() {
     genre: "",
     releaseYear: "",
   });
-  const [editingMovie, setEditingMovie] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [user, setUser] = useState(null);
   const [showLogin, setShowLogin] = useState(false);
@@ -33,10 +31,6 @@ function App() {
     } catch (err) {
       console.log("Error fetching movies:", err);
     }
-  }
-
-  function handleEditClick(movie) {
-    setEditingMovie(movie);
   }
 
   async function handleAddMovie(newMovie) {
@@ -174,18 +168,9 @@ function App() {
           <MovieList
             movies={movies}
             onDelete={handleDelete}
-            onEdit={handleEditClick}
             onMoveUp={handleMoveUp}
             onMoveDown={handleMoveDown}
           />
-
-          {editingMovie && (
-            <EditMovieForm
-              movie={editingMovie}
-              onUpdate={handleUpdateMovie}
-              onCancel={() => setEditingMovie(null)}
-            />
-          )}
         </>
       )}
     </div>
