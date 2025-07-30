@@ -21,19 +21,19 @@ function App() {
   const [showLogin, setShowLogin] = useState(false);
 
   useEffect(() => {
-    async function getMovies() {
-      try {
-        const query = new URLSearchParams(searchTerm).toString();
-        const res = await fetch(`http://localhost:3000/movies?${query}`);
-        const data = await res.json();
-        setMovies(data);
-      } catch (err) {
-        console.log("Error fetching movies:", err);
-      }
-    }
-
-    getMovies();
+    fetchMovies();
   }, [searchTerm]);
+
+  async function fetchMovies() {
+    try {
+      const query = new URLSearchParams(searchTerm).toString();
+      const res = await fetch(`http://localhost:3000/movies?${query}`);
+      const data = await res.json();
+      setMovies(data);
+    } catch (err) {
+      console.log("Error fetching movies:", err);
+    }
+  }
 
   function handleEditClick(movie) {
     setEditingMovie(movie);
@@ -81,7 +81,6 @@ function App() {
           body: JSON.stringify({
             ...updatedMovie,
             genre: updatedMovie.genre.split(",").map((g) => g.trim()),
-            releaseYear: parseInt(updatedMovie.releaseYear),
           }),
         }
       );

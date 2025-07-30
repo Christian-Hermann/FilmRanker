@@ -5,16 +5,14 @@ function EditMovieForm({ movie, onUpdate, onCancel }) {
     title: "",
     director: "",
     genre: "",
-    releaseYear: "",
   });
 
   useEffect(() => {
     if (movie) {
       setFormData({
-        title: movie.title,
-        director: movie.director,
-        genre: movie.genre.join(", "),
-        releaseYear: movie.releaseYear,
+        title: movie.title || "",
+        director: movie.director || "",
+        genre: Array.isArray(movie.genre) ? movie.genre.join(", ") : "",
       });
     }
   }, [movie]);
@@ -51,13 +49,9 @@ function EditMovieForm({ movie, onUpdate, onCancel }) {
         onChange={handleChange}
         placeholder="Genres (comma-separated)"
       />
-      <input
-        type="number"
-        name="releaseYear"
-        value={formData.releaseYear ?? ""}
-        onChange={handleChange}
-        placeholder="Release Year"
-      />
+
+      <p>Release Year: {movie.releaseYear}</p>
+
       <button type="submit">Update</button>
       <button type="button" onClick={onCancel}>
         Cancel
