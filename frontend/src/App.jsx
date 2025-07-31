@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import MovieList from "./components/MovieList";
 import SearchBar from "./components/SearchBar";
-import { deleteMovie } from "./api/movies";
-import EditMovieForm from "./components/EditMovieForm";
 import AddMovieForm from "./components/AddMovieForm";
+import RegisterForm from "./components/RegisterForm";
+import LoginForm from "./components/LoginForm";
+import { deleteMovie } from "./api/movies";
 
 function App() {
   const [movies, setMovies] = useState([]);
@@ -13,33 +14,35 @@ function App() {
     genre: "",
     releaseYear: "",
   });
-  const [editingMovie, setEditingMovie] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [user, setUser] = useState(null);
+  const [showLogin, setShowLogin] = useState(false);
 
   useEffect(() => {
-    async function getMovies() {
-      try {
-        const query = new URLSearchParams(searchTerm).toString();
-        const res = await fetch(`http://localhost:3000/movies?${query}`);
-        const data = await res.json();
-        setMovies(data);
-      } catch (err) {
-        console.log("Error fetching movies:", err);
-      }
-    }
-
-    getMovies();
+    fetchMovies();
   }, [searchTerm]);
 
-  function handleEditClick(movie) {
-    setEditingMovie(movie);
+  async function fetchMovies() {
+    try {
+      const query = new URLSearchParams(searchTerm).toString();
+      const res = await fetch(`http://localhost:3000/movies?${query}`);
+      const data = await res.json();
+      setMovies(data);
+    } catch (err) {
+      console.log("Error fetching movies:", err);
+    }
   }
 
   async function handleAddMovie(newMovie) {
+    const token = localStorage.getItem("token");
+
     try {
       const res = await fetch("http://localhost:3000/movies", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({
           ...newMovie,
           genre: newMovie.genre.split(",").map((g) => g.trim().toLowerCase()),
@@ -57,32 +60,37 @@ function App() {
     }
   }
 
-  async function handleUpdateMovie(updatedMovie) {
-    try {
-      const res = await fetch(
-        `http://localhost:3000/movies/${updatedMovie.id}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            ...updatedMovie,
-            genre: updatedMovie.genre.split(",").map((g) => g.trim()),
-            releaseYear: parseInt(updatedMovie.releaseYear),
-          }),
-        }
-      );
+  async function handleAddGenre(movieId, newGenre) {
+    const token = localStorage.getItem("token");
+    const movie = movies.find((m) => m.id === movieId);
 
-      if (!res.ok) throw new Error("Failed to update movie");
+    if (!movie || !newGenre) return;
+
+    const updatedGenres = [
+      ...new Set([...movie.genre, newGenre.toLowerCase()]),
+    ];
+
+    try {
+      const res = await fetch(`http://localhost:3000/movies/${movieId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          ...movie,
+          genre: updatedGenres,
+          releaseYear: parseInt(movie.releaseYear),
+        }),
+      });
+
+      if (!res.ok) throw new Error("Failed to update genres");
 
       const data = await res.json();
 
-      setMovies((movies) =>
-        movies.map((movie) => (movie.id === data.id ? data : movie))
-      );
-
-      setEditingMovie(null);
+      setMovies((prev) => prev.map((m) => (m.id === data.id ? data : m)));
     } catch (err) {
-      console.log("Error updating movie:", err);
+      console.error("Error adding genre:", err);
     }
   }
 
@@ -124,24 +132,48 @@ function App() {
   return (
     <div>
       <h1>FilmRanker</h1>
-      <button onClick={() => setShowAddForm(!showAddForm)}>
-        {showAddForm ? "Cancel" : "Add a new film"}
-      </button>
-      {showAddForm && <AddMovieForm onAdd={handleAddMovie} />}
-      <SearchBar onSearch={setSearchTerm} />
-      <MovieList
-        movies={movies}
-        onDelete={handleDelete}
-        onEdit={handleEditClick}
-        onMoveUp={handleMoveUp}
-        onMoveDown={handleMoveDown}
-      />
-      {editingMovie && (
-        <EditMovieForm
-          movie={editingMovie}
-          onUpdate={handleUpdateMovie}
-          onCancel={() => setEditingMovie(null)}
-        />
+
+      {!user ? (
+        <>
+          {showLogin ? (
+            <>
+              <LoginForm onLogin={setUser} />
+              <p>
+                Don't have an account?{" "}
+                <button onClick={() => setShowLogin(false)}>Register</button>
+              </p>
+            </>
+          ) : (
+            <>
+              <RegisterForm onRegister={setUser} />
+              <p>
+                Already have an account?{" "}
+                <button onClick={() => setShowLogin(true)}>Login</button>
+              </p>
+            </>
+          )}
+        </>
+      ) : (
+        <>
+          <p>Welcome, {user.username}!</p>
+          <button onClick={() => setUser(null)}>Logout</button>
+
+          <button onClick={() => setShowAddForm(!showAddForm)}>
+            {showAddForm ? "Cancel" : "Add a new film"}
+          </button>
+
+          {showAddForm && <AddMovieForm onAdd={handleAddMovie} />}
+
+          <SearchBar onSearch={setSearchTerm} />
+
+          <MovieList
+            movies={movies}
+            onDelete={handleDelete}
+            onMoveUp={handleMoveUp}
+            onMoveDown={handleMoveDown}
+            onAddGenre={handleAddGenre}
+          />
+        </>
       )}
     </div>
   );
