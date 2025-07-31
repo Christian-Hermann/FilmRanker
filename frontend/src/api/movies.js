@@ -26,8 +26,13 @@ export async function addMovie(movieData) {
 }
 
 export async function deleteMovie(id) {
+  const token = localStorage.getItem("token");
+
   const res = await fetch(`${BASE_URL}/${id}`, {
     method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   });
   if (!res.ok) {
     throw new Error("Failed to delete movie");

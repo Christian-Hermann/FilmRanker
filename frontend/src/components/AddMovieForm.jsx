@@ -23,7 +23,10 @@ function AddMovieForm({ onAdd }) {
       alert("Please fill out all fields.");
       return;
     }
-    onAdd(formData);
+    onAdd({
+      ...formData,
+      releaseYear: releaseYear ? parseInt(releaseYear) : null,
+    });
     setFormData({ title: "", director: "", genre: "", releaseYear: "" });
   };
 
