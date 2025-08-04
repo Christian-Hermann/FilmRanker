@@ -23,13 +23,27 @@ function App() {
   }, [searchTerm]);
 
   async function fetchMovies() {
+    const token = localStorage.getItem("token");
+
     try {
       const query = new URLSearchParams(searchTerm).toString();
-      const res = await fetch(`http://localhost:3000/movies?${query}`);
+      const res = await fetch(`http://localhost:3000/movies?${query}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
       const data = await res.json();
-      setMovies(data);
+
+      if (res.ok) {
+        setMovies(data);
+      } else {
+        console.error("Error fetching movies:", data.error);
+        setMovies([]);
+      }
     } catch (err) {
-      console.log("Error fetching movies:", err);
+      console.error("Network error while fetching movies:", err);
+      setMovies([]);
     }
   }
 
