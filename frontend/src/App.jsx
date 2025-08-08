@@ -4,6 +4,7 @@ import SearchBar from "./components/SearchBar";
 import AddMovieForm from "./components/AddMovieForm";
 import RegisterForm from "./components/RegisterForm";
 import LoginForm from "./components/LoginForm";
+import AuthManager from "./components/AuthManager";
 import { deleteMovie } from "./api/movies";
 
 function App() {
@@ -112,47 +113,10 @@ function App() {
   return (
     <div>
       <h1>FilmRanker</h1>
-
       {!user ? (
-        <>
-          {showLogin ? (
-            <>
-              <LoginForm onLogin={setUser} />
-              <p>
-                Don't have an account?{" "}
-                <button onClick={() => setShowLogin(false)}>Register</button>
-              </p>
-            </>
-          ) : (
-            <>
-              <RegisterForm onRegister={setUser} />
-              <p>
-                Already have an account?{" "}
-                <button onClick={() => setShowLogin(true)}>Login</button>
-              </p>
-            </>
-          )}
-        </>
+        <AuthManager setUser={setUser} />
       ) : (
-        <>
-          <p>Welcome, {user.username}!</p>
-          <button onClick={() => setUser(null)}>Logout</button>
-
-          <button onClick={() => setShowAddForm(!showAddForm)}>
-            {showAddForm ? "Cancel" : "Add a new film"}
-          </button>
-
-          {showAddForm && <AddMovieForm onAdd={handleAddMovie} />}
-
-          <SearchBar onSearch={setSearchTerm} />
-
-          <MovieList
-            movies={movies}
-            onDelete={handleDelete}
-            onMoveUp={handleMoveUp}
-            onMoveDown={handleMoveDown}
-          />
-        </>
+        <>{/*  UserBanner + MovieManager   */}</>
       )}
     </div>
   );
