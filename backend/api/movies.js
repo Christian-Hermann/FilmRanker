@@ -34,7 +34,7 @@ router.get("/", async (req, res) => {
     console.log("Returning movies:", movies);
     res.json(movies);
   } catch (err) {
-    console.error("Errror getting movies:", err);
+    console.error("Error getting movies:", err);
     res.status(500).json({ error: "Internal server error" });
   }
 });
