@@ -1,20 +1,43 @@
+// frontend/src/api/movies.js
 const BASE_URL = "http://localhost:3000/movies";
 
-export async function getAllMovies(searchParams = "") {
-  const res = await fetch(`${BASE_URL}?${searchParams}`);
+export async function getAllMovies() {
+  const token = localStorage.getItem("token");
+
+  const res = await fetch(BASE_URL, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch movies");
+  }
+
   return await res.json();
 }
 
 export async function addMovie(movieData) {
+  const token = localStorage.getItem("token");
+
   const formattedData = {
     ...movieData,
-    genre: movieData.genre.split(",").map((g) => g.trim().toLowerCase()),
-    releaseYear: parseInt(movieData.releaseYear),
+    // your DB uses TEXT[] → send an array
+    genre: movieData.genre.split(",").map((g) => g.trim()),
+    // number or null is fine
+    releaseYear:
+      movieData.releaseYear === "" || movieData.releaseYear == null
+        ? null
+        : parseInt(movieData.releaseYear),
   };
 
   const res = await fetch(BASE_URL, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
     body: JSON.stringify(formattedData),
   });
 
@@ -30,10 +53,9 @@ export async function deleteMovie(id) {
 
   const res = await fetch(`${BASE_URL}/${id}`, {
     method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    headers: { Authorization: `Bearer ${token}` },
   });
+
   if (!res.ok) {
     throw new Error("Failed to delete movie");
   }
