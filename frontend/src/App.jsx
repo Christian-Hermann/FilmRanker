@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import MovieList from "./components/MovieList";
-import SearchBar from "./components/SearchBar";
 import AddMovieForm from "./components/AddMovieForm";
 import RegisterForm from "./components/RegisterForm";
 import LoginForm from "./components/LoginForm";
@@ -8,33 +7,29 @@ import { deleteMovie } from "./api/movies";
 
 function App() {
   const [movies, setMovies] = useState([]);
-  const [searchTerm, setSearchTerm] = useState({
-    title: "",
-    director: "",
-    genre: "",
-    releaseYear: "",
-  });
   const [showAddForm, setShowAddForm] = useState(false);
   const [user, setUser] = useState(null);
   const [showLogin, setShowLogin] = useState(false);
 
   useEffect(() => {
-    fetchMovies();
-  }, [searchTerm]);
+    const token = localStorage.getItem("token");
+    if (token) {
+      fetchMovies();
+    } else {
+      setMovies([]);
+    }
+  }, [user]);
 
   async function fetchMovies() {
     const token = localStorage.getItem("token");
-
     try {
-      const query = new URLSearchParams(searchTerm).toString();
-      const res = await fetch(`http://localhost:3000/movies?${query}`, {
+      const res = await fetch("http://localhost:3000/movies", {
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       });
-
       const data = await res.json();
-
       if (res.ok) {
         setMovies(data);
       } else {
@@ -109,6 +104,12 @@ function App() {
     });
   }
 
+  function handleLogout() {
+    localStorage.removeItem("token");
+    setUser(null);
+    setMovies([]);
+  }
+
   return (
     <div>
       <h1>FilmRanker</h1>
@@ -136,15 +137,13 @@ function App() {
       ) : (
         <>
           <p>Welcome, {user.username}!</p>
-          <button onClick={() => setUser(null)}>Logout</button>
+          <button onClick={handleLogout}>Logout</button>
 
           <button onClick={() => setShowAddForm(!showAddForm)}>
             {showAddForm ? "Cancel" : "Add a new film"}
           </button>
 
           {showAddForm && <AddMovieForm onAdd={handleAddMovie} />}
-
-          <SearchBar onSearch={setSearchTerm} />
 
           <MovieList
             movies={movies}
