@@ -56,7 +56,9 @@ function AddMovieForm({ onAdd }) {
         onChange={handleChange}
         placeholder="Release Year"
       />
-      <button type="submit">Add Movie</button>
+      <button type="submit" className="btn">
+        Add Film
+      </button>
     </form>
   );
 }

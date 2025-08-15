@@ -44,7 +44,9 @@ export default function LoginForm({ onLogin }) {
         />
       </div>
 
-      <button type="submit">Login</button>
+      <button type="submit" className="btn">
+        Login
+      </button>
 
       {error && <p>{error}</p>}
     </form>

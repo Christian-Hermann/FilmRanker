@@ -3,6 +3,7 @@ import MovieList from "./components/MovieList";
 import AddMovieForm from "./components/AddMovieForm";
 import RegisterForm from "./components/RegisterForm";
 import LoginForm from "./components/LoginForm";
+import "./styles.css";
 import { deleteMovie } from "./api/movies";
 
 function App() {
@@ -111,46 +112,70 @@ function App() {
   }
 
   return (
-    <div>
-      <h1>FilmRanker</h1>
+    <div className="app">
+      <div className="header">
+        <h1>FilmRanker</h1>
 
+        {user && (
+          <div className="row">
+            <button
+              className="btn"
+              onClick={() => setShowAddForm(!showAddForm)}
+            >
+              {showAddForm ? "Cancel" : "Add a new film"}
+            </button>
+            <button className="btn btn-outline" onClick={handleLogout}>
+              Logout
+            </button>
+          </div>
+        )}
+      </div>
       {!user ? (
         <>
           {showLogin ? (
-            <>
+            <div className="card">
               <LoginForm onLogin={setUser} />
-              <p>
+              <p style={{ marginTop: 8 }}>
                 Don't have an account?{" "}
-                <button onClick={() => setShowLogin(false)}>Register</button>
+                <button
+                  className="btn btn-outline"
+                  onClick={() => setShowLogin(false)}
+                >
+                  Register
+                </button>
               </p>
-            </>
+            </div>
           ) : (
-            <>
+            <div className="card">
               <RegisterForm onRegister={setUser} />
-              <p>
+              <p style={{ marginTop: 8 }}>
                 Already have an account?{" "}
-                <button onClick={() => setShowLogin(true)}>Login</button>
+                <button
+                  className="btn btn-outline"
+                  onClick={() => setShowLogin(true)}
+                >
+                  Login
+                </button>
               </p>
-            </>
+            </div>
           )}
         </>
       ) : (
         <>
-          <p>Welcome, {user.username}!</p>
-          <button onClick={handleLogout}>Logout</button>
+          {showAddForm && (
+            <div className="card">
+              <AddMovieForm onAdd={handleAddMovie} />
+            </div>
+          )}
 
-          <button onClick={() => setShowAddForm(!showAddForm)}>
-            {showAddForm ? "Cancel" : "Add a new film"}
-          </button>
-
-          {showAddForm && <AddMovieForm onAdd={handleAddMovie} />}
-
-          <MovieList
-            movies={movies}
-            onDelete={handleDelete}
-            onMoveUp={handleMoveUp}
-            onMoveDown={handleMoveDown}
-          />
+          <div className="movie-list">
+            <MovieList
+              movies={movies}
+              onDelete={handleDelete}
+              onMoveUp={handleMoveUp}
+              onMoveDown={handleMoveDown}
+            />
+          </div>
         </>
       )}
     </div>

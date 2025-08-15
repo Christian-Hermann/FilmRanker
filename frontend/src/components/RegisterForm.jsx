@@ -44,7 +44,9 @@ export default function RegisterForm({ onRegister }) {
         />
       </div>
 
-      <button type="submit">Register</button>
+      <button type="submit" className="btn">
+        Register
+      </button>
 
       {error && <p>{error}</p>}
     </form>
