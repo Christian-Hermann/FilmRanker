@@ -1,12 +1,10 @@
-/* === 70s mini theme (super simple) === */
-
 /* palette */
 :root {
-  --bg: #fff6e5; /* warm cream */
-  --ink: #3b2f2f; /* chocolate brown */
-  --accent: #d97706; /* burnt orange */
-  --accent-2: #6b8e23; /* avocado green */
-  --border: #ead6b7; /* tan */
+  --bg: #fff6e5;
+  --ink: #3b2f2f;
+  --accent: #d97706;
+  --accent-2: #6b8e23;
+  --border: #ead6b7;
 }
 
 *,
@@ -57,7 +55,7 @@ body {
   flex-wrap: wrap;
 }
 
-/* headings — subtle 70s vibe (thicker, slight letter spacing) */
+/* headings */
 h1 {
   margin: 0;
   font-size: 28px;
@@ -95,17 +93,16 @@ input:focus,
 select:focus,
 textarea:focus,
 button:focus {
-  outline: none; /* no outside glow */
-  border-color: var(--accent-2); /* tint the element border */
-  box-shadow: 0 0 0 2px var(--accent-2) inset; /* inner ring */
+  outline: none;
+  border-color: var(--accent-2);
+  box-shadow: 0 0 0 2px var(--accent-2) inset;
 }
 
-/* Add a little space between controls inside cards */
 .card input,
 .card select,
 .card textarea,
 .card button {
-  margin-top: 8px; /* change to 6 or 10 if you want */
+  margin-top: 8px;
 }
 
 /* buttons */
@@ -115,7 +112,7 @@ button:focus {
   justify-content: center;
   gap: 6px;
   padding: 10px 14px;
-  border-radius: 999px; /* pill = retro */
+  border-radius: 999px;
   border: 2px solid transparent;
   background: var(--accent);
   color: #fff;
@@ -137,17 +134,15 @@ button:focus {
 }
 
 .btn-danger {
-  background: #b45309; /* rust */
+  background: #b45309;
 }
 
-/* movie grid */
 .movie-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 12px;
 }
 
-/* if your MovieList renders bare items, give them the card look */
 .movie-list {
   list-style: none;
   padding: 0;
