@@ -1,7 +1,6 @@
-// backend/api/movies.js
 import express from "express";
 import { requireUser } from "../middleware/requireUser.js";
-import { pool } from "../db/index.js"; // <-- adjust if your pool file name differs
+import { pool } from "../db/index.js";
 
 const router = express.Router();
 
@@ -28,7 +27,6 @@ router.get("/", requireUser, async (req, res) => {
 /**
  * POST /movies
  * Create a movie owned by the current user.
- * Your schema has genre TEXT[] so we make sure it's an array.
  */
 router.post("/", requireUser, async (req, res) => {
   try {

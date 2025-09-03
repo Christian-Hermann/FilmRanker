@@ -16,7 +16,7 @@ app.use("/movies", moviesRouter);
 app.use("/auth", authRoutes);
 
 app.get("/", (req, res) => {
-  res.send("FilmRanker backend is running!!!");
+  res.send("FilmRanker backend is running!");
 });
 
 export default app;
