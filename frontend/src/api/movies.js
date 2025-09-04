@@ -1,5 +1,6 @@
-// frontend/src/api/movies.js
-const BASE_URL = `${import.meta.env.VITE_API_URL}/movies`;
+const API =
+  import.meta.env.VITE_API_URL || "https://filmranker-api.onrender.com";
+const BASE_URL = `${API}/movies`;
 
 export async function getAllMovies() {
   const token = localStorage.getItem("token");
