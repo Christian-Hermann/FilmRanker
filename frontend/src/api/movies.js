@@ -1,5 +1,5 @@
 // frontend/src/api/movies.js
-const BASE_URL = `${import.meta.env.VITE_API_URL}/auth`;
+const BASE_URL = `${import.meta.env.VITE_API_URL}/movies`;
 
 export async function getAllMovies() {
   const token = localStorage.getItem("token");
