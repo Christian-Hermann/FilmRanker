@@ -1,4 +1,4 @@
-const API = import.meta.env.VITE_API_URL; // from Netlify env
+const API = import.meta.env.VITE_API_URL || "https://filmranker.onrender.com";
 const BASE_URL = `${API}/movies`;
 
 export async function getAllMovies() {
