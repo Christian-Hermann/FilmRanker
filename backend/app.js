@@ -6,6 +6,17 @@ import { getUserFromToken } from "./middleware/getUserFromToken.js";
 
 const app = express();
 
+/* === CORS: bootcamp style (uses env var) === */
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN, // e.g. https://filmranker-2025.netlify.app
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+// keep preflight happy
+app.options("*", cors({ origin: process.env.CORS_ORIGIN }));
+
 // Middlewear
 app.use(cors());
 app.use(express.json());
