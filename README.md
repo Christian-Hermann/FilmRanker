@@ -1,6 +1,10 @@
 # 🎬 FilmRanker
 
-FilmRanker is a full-stack web application that lets users **add, browse, search, and rank their favorite movies**.  
+FilmRanker is a full-stack web application that lets users **add, browse, search, and rank their favorite movies**.
+
+🔗 **Live:** https://filmranker-2025.netlify.app  
+🛰️ **API:** https://filmranker.onrender.com
+
 It’s built with **React** (frontend), **Express** (backend), and **PostgreSQL** (database), and uses **JWT authentication** to keep each user’s movies private.
 
 ---
