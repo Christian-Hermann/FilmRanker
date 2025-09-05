@@ -6,6 +6,8 @@ import LoginForm from "./components/LoginForm";
 import "./styles.css";
 import { deleteMovie } from "./api/movies";
 
+const API = import.meta.env.VITE_API_URL || "https://filmranker.onrender.com";
+
 function App() {
   const [movies, setMovies] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -24,7 +26,7 @@ function App() {
   async function fetchMovies() {
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch("http://localhost:3000/movies", {
+      const res = await fetch(`${API}/movies`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -47,7 +49,7 @@ function App() {
     const token = localStorage.getItem("token");
 
     try {
-      const res = await fetch("http://localhost:3000/movies", {
+      const res = await fetch(`${API}/movies`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
