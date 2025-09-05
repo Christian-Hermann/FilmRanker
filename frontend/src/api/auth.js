@@ -1,4 +1,5 @@
-const BASE_URL = "http://localhost:3000/auth";
+const API = import.meta.env.VITE_API_URL; // from Netlify env
+const BASE_URL = `${API}/auth`;
 
 // LOGIN USER AND STORE TOKEN
 export async function loginUser(username, password) {

@@ -1,5 +1,5 @@
-// frontend/src/api/movies.js
-const BASE_URL = "http://localhost:3000/movies";
+const API = import.meta.env.VITE_API_URL; // from Netlify env
+const BASE_URL = `${API}/movies`;
 
 export async function getAllMovies() {
   const token = localStorage.getItem("token");
