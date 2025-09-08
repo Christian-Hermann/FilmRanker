@@ -23,9 +23,9 @@ export async function addMovie(movieData) {
 
   const formattedData = {
     ...movieData,
-    // your DB uses TEXT[] → send an array
+
     genre: movieData.genre.split(",").map((g) => g.trim()),
-    // number or null is fine
+
     releaseYear:
       movieData.releaseYear === "" || movieData.releaseYear == null
         ? null

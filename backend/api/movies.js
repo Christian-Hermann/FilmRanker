@@ -1,14 +1,11 @@
-// backend/api/movies.js
 import express from "express";
 import { requireUser } from "../middleware/requireUser.js";
-import { pool } from "../db/index.js"; // <-- adjust if your pool file name differs
+import { pool } from "../db/index.js";
 
 const router = express.Router();
 
-/**
- * GET /movies
- * Return ONLY the current user's movies.
- */
+// GET /movies
+
 router.get("/", requireUser, async (req, res) => {
   try {
     const result = await pool.query(
@@ -25,11 +22,8 @@ router.get("/", requireUser, async (req, res) => {
   }
 });
 
-/**
- * POST /movies
- * Create a movie owned by the current user.
- * Your schema has genre TEXT[] so we make sure it's an array.
- */
+// POST /movies
+
 router.post("/", requireUser, async (req, res) => {
   try {
     const { title, director, genre, releaseYear } = req.body;
@@ -58,10 +52,8 @@ router.post("/", requireUser, async (req, res) => {
   }
 });
 
-/**
- * DELETE /movies/:id
- * Delete ONLY a movie that belongs to the current user.
- */
+// DELETE /movies/:id
+
 router.delete("/:id", requireUser, async (req, res) => {
   try {
     const id = Number(req.params.id);
