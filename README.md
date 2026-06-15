@@ -1,69 +1,36 @@
-FilmRanker
+# FilmRanker
 
-FilmRanker is a full-stack web application that lets users add, browse, search, and rank their favorite movies.
+FilmRanker is a full-stack movie ranking application that I built to learn React, Express, PostgreSQL, authentication, and deployment.
 
-Live: https://filmranker-2025.netlify.app  
-API: https://filmranker.onrender.com
+The project allows users to create an account, log in, and maintain their own personal movie collection. Users can add movies, search through their collection, delete movies, and manually adjust rankings.
 
-It’s built with React (frontend), Express (backend), and PostgreSQL (database), and uses JWT authentication to keep each user’s movies private.
+Live Site:
+https://filmranker-2025.netlify.app
 
----
+API:
+https://filmranker.onrender.com
 
-Features
+The frontend was built with React and the backend was built with Express and PostgreSQL. Authentication is handled with JSON Web Tokens (JWT), and each user only has access to their own movie data.
 
-- User Authentication – Users can register, log in, and stay signed in using JSON Web Tokens (JWT).
-- Add Movies – Title, director, genre, and release year.
-- Search & Filter – Search movies by title, director, genre, or year.
-- User-Specific Data – Each user only sees and manages their own movies.
-- Delete Movies – Remove a movie from your list.
-- ⬆️/⬇️ Arrow Buttons – Adjust movie rankings visually.
-- Frontend Built with React Hooks – Uses 'useState' and `useEffect for state and data fetching.
+Users can:
 
----
+- Create an account
+- Log in and log out
+- Add movies
+- Search movies by title, director, genre, or release year
+- Delete movies
+- Adjust movie rankings with up and down controls
+- Manage a personal movie collection
 
-Tech Stack
+Working on FilmRanker helped me learn:
 
-Frontend:
+- React state management
+- React Hooks (useState and useEffect)
+- Building REST APIs with Express
+- PostgreSQL databases and relationships
+- Authentication and authorization with JWT
+- Protected routes
+- Frontend and backend communication
+- Deployment with Netlify and Render
 
-- React (Vite)
-- JavaScript (ES6)
-- CSS (custom styles)
-
-Backend:
-
-- Node.js / Express.js
-- PostgreSQL
-- JWT Authentication
-
-Tools:
-
-- Thunder Client (API testing)
-- Git & GitHub (version control)
-
----
-
-Planned Features:
-
-- Ranking System – Allow users to set a ranking for each movie and reorder their list.
-- Scrollable Movie List – Better layout for large collections.
-- Improved Search – Case-insensitive and more responsive.
-- Better Styling – More polished, user-friendly interface.
-
----
-
-Project Structure
-
-FilmRanker/
-├── backend/
-│ ├── api/ # Express route handlers (movies, auth)
-│ ├── middleware/ # Authentication and request helpers
-│ ├── db/ # PostgreSQL connection and queries
-│ └── app.js # Main Express app setup
-│
-├── frontend/
-│ ├── components/ # React UI components
-│ ├── api/ # Frontend API request helpers
-│ ├── App.jsx # Main React component
-│ └── main.jsx # Entry point
-│
-└── README.md
+FilmRanker was my first full-stack application and remains one of the projects that taught me the most about how frontend, backend, databases, and authentication work together.
