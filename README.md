@@ -1,4 +1,4 @@
-# FilmRanker
+- FilmRanker
 
 FilmRanker is a full-stack movie ranking application that I built to learn React, Express, PostgreSQL, authentication, and deployment.
 
